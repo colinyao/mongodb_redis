@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript" src="/jquery-3.1.1.min.js"></script>
 </head>
+
 <body>
-	<form action="postScore" method="post">
-		<input type="text" name="name">
-		<input type="text" name="score">
-		<input type="submit" name="">
-	</form>
+    <form action="postScore" method="post">
+        <input type="text" name="name">
+        <input type="text" name="score">
+        <input type="submit" name=""> 
+    </form>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        function ajax() {
+            var name = Math.random() * 1000;
+            var score = Math.random() * 1000;
+            $.ajax({
+                url: '/postScore',
+                method: 'post',
+                data: {
+                    name: name,
+                    score: score
+                },
+                success: function() {
+                    ajax()
+                }
+            })
+        }
+
+        ajax()
+    })
+    </script>
 </body>
-<script type="text/javascript">
-	
-</script>
+
 </html>
