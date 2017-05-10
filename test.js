@@ -15,19 +15,21 @@ let MongoClient = require('mongodb').MongoClient;
 let test='';
 let DB_CONN_STR = 'mongodb://localhost:27017/test';    
 
-let insertData = function(callback) {  
+let insertData = function(data) {  
     //连接到表  
-    let collection = test.collection('rankList');
-    //插入数据
-    let data = [{"name":'wilson001',"score":21}];
-    collection.insert(data, function(err, result) { 
-        if(err)
-        {
-            console.log('Error:'+ err);
-            return;
-        }     
-        if(callback)callback(result);
-    });
+    return new Promise((reslove,reject)=>{
+		     let collection = test.collection('rankList');
+		    //插入数据
+		    collection.insert(data, function(err, result) { 
+		        if(err)
+		        {
+		            console.log('Error:'+ err);
+		            return;
+		        }     
+		        reslove(result)
+		    });   	
+    })
+
 }
 
 app.get('/',(req,res)=>{
@@ -36,8 +38,9 @@ app.get('/',(req,res)=>{
 app.post('/postScore',(req,res)=>{
 	let name=req.params.name;
 	let score=req.params.score
-	insertData()
-	res.render('index');
+	insertData({name:name,score:score}).then(()=>{
+		res.render('index');
+	})
 })
 redisClient.on('ready',()=>{
    console.log('redis Ok')
